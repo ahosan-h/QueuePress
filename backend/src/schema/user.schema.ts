@@ -1,15 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
 import { Document } from 'mongoose';
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+})
 export class User extends Document {
-  @Prop({ required: true, unique: true })
+  @Prop({
+    required: true,
+    unique: true,
+  })
   clerkId!: string;
 
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    trim: true,
+  })
   email!: string;
 
-  @Prop()
+  @Prop({
+    trim: true,
+  })
   username!: string;
 
   @Prop()
@@ -20,8 +31,10 @@ export class User extends Document {
   })
   totalPosts!: number;
 
-  @Prop({ default: 0 })
+  @Prop({
+    default: 0,
+  })
   publishedPosts!: number;
 }
 
-export const UserSchma = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);

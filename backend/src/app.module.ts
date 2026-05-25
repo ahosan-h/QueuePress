@@ -1,9 +1,33 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
+
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        const uri = configService.get<string>('MONGO_URI');
+
+        if (!uri) {
+          throw new Error('MONGO_URI missing');
+        }
+
+        return { uri };
+      },
+      inject: [ConfigService],
+    }),
+
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
