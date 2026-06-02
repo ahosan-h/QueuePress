@@ -1,3 +1,4 @@
+import TestToken from "@/components/TestToken";
 import Link from "next/link";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
         >
           Sign Up
         </Link>
+        <TestToken />
       </div>
     </div>
   );
