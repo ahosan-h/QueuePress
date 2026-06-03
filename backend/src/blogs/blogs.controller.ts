@@ -10,9 +10,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
-import { CreateBlogDto } from './dto/blogs.dot';
+import { CreateBlogDto } from './dto/create-blogs.dto';
 import type { AuthRequest } from 'src/auth/interfaces/auth-request.interface';
-import { UpdateBlogDto } from './dto/update-blog.dot';
+import { UpdateBlogDto } from './dto/update-blog.dto';
 import { ClerkAuthGuard } from 'src/auth/auth.guard';
 
 @Controller('blogs')

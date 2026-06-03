@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog } from './schema/blogs.schema';
 import { Model, UpdateQuery } from 'mongoose';
-import { CreateBlogDto } from './dto/blogs.dot';
-import { UpdateBlogDto } from './dto/update-blog.dot';
+import { CreateBlogDto } from './dto/create-blogs.dto';
+import { UpdateBlogDto } from './dto/update-blog.dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class BlogsService {
@@ -15,8 +16,14 @@ export class BlogsService {
   async create(userId: string, dto: CreateBlogDto) {
     const readingTime = Math.ceil(dto.content.trim().split(/\s+/).length / 200);
 
+    const slug = slugify(dto.title, {
+      lower: true,
+      strict: true,
+    });
+
     return this.blogModel.create({
       ...dto,
+      slug,
       userId,
       readingTime,
       status: dto.scheduledAt ? 'scheduled' : 'draft',
