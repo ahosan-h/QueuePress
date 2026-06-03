@@ -15,5 +15,6 @@ import { Blog, BlogSchema } from './schema/blogs.schema';
   ],
   controllers: [BlogsController],
   providers: [BlogsService],
+  exports: [MongooseModule, BlogsService],
 })
 export class BlogsModule {}
