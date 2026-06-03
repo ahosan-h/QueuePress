@@ -36,7 +36,7 @@ import { QueueModule } from './queue/queue.module';
       useFactory: (config: ConfigService) => ({
         connection: {
           host: config.get<string>('REDIS_HOST'),
-          post: config.get<number>('REDIS_PORT'),
+          port: config.get<number>('REDIS_PORT'),
         },
       }),
     }),

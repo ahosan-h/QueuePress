@@ -1,15 +1,24 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+
 import { BlogPublishService } from './blog-publish.service';
 import { BlogPublishProcessor } from './blog-publish.processor';
-import { BlogsModule } from 'src/blogs/blogs.module';
+
+import { Blog, BlogSchema } from 'src/blogs/schema/blogs.schema';
 
 @Module({
   imports: [
-    BlogsModule,
     BullModule.registerQueue({
       name: 'publish',
     }),
+
+    MongooseModule.forFeature([
+      {
+        name: Blog.name,
+        schema: BlogSchema,
+      },
+    ]),
   ],
   providers: [BlogPublishService, BlogPublishProcessor],
   exports: [BlogPublishService],

@@ -15,6 +15,7 @@ export class BlogPublishProcessor extends WorkerHost {
     private readonly blogModel: Model<Blog>,
   ) {
     super();
+    console.log('BlogPublishProcessor loaded');
   }
 
   async process(job: Job<PublishBlogJobData>) {

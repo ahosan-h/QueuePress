@@ -6,28 +6,49 @@ import { CreateBlogDto } from './dto/create-blogs.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import slugify from 'slugify';
 
+import { BlogPublishService } from 'src/queue/blog-publish.service';
+
 @Injectable()
 export class BlogsService {
   constructor(
     @InjectModel(Blog.name)
     private readonly blogModel: Model<Blog>,
+
+    private readonly blogPublishService: BlogPublishService,
   ) {}
 
   async create(userId: string, dto: CreateBlogDto) {
     const readingTime = Math.ceil(dto.content.trim().split(/\s+/).length / 200);
 
-    const slug = slugify(dto.title, {
+    const baseSlug = slugify(dto.title, {
       lower: true,
       strict: true,
     });
 
-    return this.blogModel.create({
+    let slug = baseSlug;
+
+    const existing = await this.blogModel.findOne({ slug });
+
+    if (existing) {
+      slug = `${baseSlug}-${Date.now()}`;
+    }
+
+    const blog = await this.blogModel.create({
       ...dto,
       slug,
       userId,
       readingTime,
       status: dto.scheduledAt ? 'scheduled' : 'draft',
     });
+
+    if (dto.scheduledAt) {
+      await this.blogPublishService.schedulePost(
+        String(blog._id),
+        dto.scheduledAt,
+      );
+    }
+
+    return blog;
   }
 
   async findAll(userId: string) {
