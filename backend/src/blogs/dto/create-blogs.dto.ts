@@ -7,9 +7,6 @@ export class CreateBlogDto {
   @IsString()
   content!: string;
 
-  @IsString()
-  slug!: string;
-
   @IsOptional()
   @IsString()
   summary?: string;
