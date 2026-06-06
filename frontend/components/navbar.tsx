@@ -14,7 +14,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 lg:z-50 h-16 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="flex h-full items-center justify-between px-2 md:px-6">
-        <div className="flex items-center gap-2 md:gap-5 ">
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-5 pl-2 ">
           <div className="lg:hidden">
             <Sidebar />
           </div>

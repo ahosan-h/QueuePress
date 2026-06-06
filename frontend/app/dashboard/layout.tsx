@@ -15,7 +15,9 @@ export default function DashboardLayout({
       <div>
         <Navbar />
 
-        <main className="min-h-[calc(100vh-64px)] p-6">{children}</main>
+        <main className="min-h-[calc(100vh-64px)] lg:ml-72 p-6">
+          {children}
+        </main>
       </div>
     </>
   );
