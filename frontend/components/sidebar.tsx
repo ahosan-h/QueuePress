@@ -82,19 +82,19 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r bg-background lg:block">
+      <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r bg-background lg:block lg:z-40">
         <SidebarContent />
       </aside>
 
       {/* Mobile Sidebar */}
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="lg:hidden">
+          <Button variant="outline" size="icon" className="lg:hidden">
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="left" className="w-30 p-0">
+        <SheetContent side="left" className="w-72 p-0">
           <SheetHeader className="sr-only">
             <SheetTitle>Navigation Menu</SheetTitle>
           </SheetHeader>

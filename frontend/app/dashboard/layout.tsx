@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/navbar";
+import { Sidebar } from "@/components/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -8,7 +9,7 @@ export default function DashboardLayout({
   return (
     <>
       <div className="hidden lg:block">
-        <div className="fixed left-0 top-0 w-72" />
+        <Sidebar />
       </div>
 
       <div>
