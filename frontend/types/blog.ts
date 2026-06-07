@@ -25,3 +25,24 @@ export interface Blog {
 
   updatedAt: string;
 }
+
+export interface CreateBlogDto {
+  title: string;
+  content: string;
+
+  summary?: string;
+
+  keyword?: string[];
+
+  scheduledAt?: string;
+}
+export interface UpdateBlogDto {
+  title?: string;
+  content?: string;
+
+  summary?: string;
+
+  keyword?: string[];
+
+  scheduledAt?: string;
+}

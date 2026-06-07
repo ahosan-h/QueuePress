@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -95,9 +96,22 @@ export function Sidebar() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="left" className="w-72 p-0">
+        <SheetContent
+          side="left"
+          className="
+           w-72 p-0
+           data-[state=open]:animate-in
+           data-[state=closed]:animate-out
+           data-[state=open]:slide-in-from-left
+           data-[state=closed]:slide-out-to-left
+           duration-400
+           "
+        >
           <SheetHeader className="sr-only">
             <SheetTitle>Navigation Menu</SheetTitle>
+            <SheetDescription>
+              Main application navigation links
+            </SheetDescription>
           </SheetHeader>
 
           <SidebarContent />
