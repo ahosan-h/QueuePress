@@ -16,10 +16,12 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Image from "next/image";
 
 const navItems = [
   {
@@ -50,7 +52,7 @@ function SidebarContent() {
   return (
     <>
       <div className="flex h-16 items-center border-b px-6">
-        <h2 className="text-lg font-semibold">QueuePress</h2>
+        <Image src="/logo-app.png" alt="QueuePress" width={140} height={32} />
       </div>
 
       <nav className="space-y-2 p-4">
@@ -94,9 +96,22 @@ export function Sidebar() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="left" className="w-72 p-0">
+        <SheetContent
+          side="left"
+          className="
+           w-72 p-0
+           data-[state=open]:animate-in
+           data-[state=closed]:animate-out
+           data-[state=open]:slide-in-from-left
+           data-[state=closed]:slide-out-to-left
+           duration-400
+           "
+        >
           <SheetHeader className="sr-only">
             <SheetTitle>Navigation Menu</SheetTitle>
+            <SheetDescription>
+              Main application navigation links
+            </SheetDescription>
           </SheetHeader>
 
           <SidebarContent />
