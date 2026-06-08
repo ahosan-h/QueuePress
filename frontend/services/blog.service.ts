@@ -2,9 +2,10 @@ import { apiFetch } from "@/lib/api";
 import { Blog, CreateBlogDto, UpdateBlogDto } from "@/types/blog";
 
 export const BlogService = {
-  getAll: () => apiFetch<Blog[]>("/blogs"),
+  getAll: (token: string) => apiFetch<Blog[]>("/blogs", { token }),
 
-  getById: (id: string) => apiFetch<Blog>(`/blogs/${id}`),
+  getById: (id: string, token: string) =>
+    apiFetch<Blog>(`/blogs/${id}`, { token }),
 
   create: (data: CreateBlogDto, token: string) =>
     apiFetch<Blog>("/blogs", {
@@ -13,7 +14,7 @@ export const BlogService = {
       body: data,
     }),
 
-  update: (data: UpdateBlogDto, token: string, id: string) =>
+  update: (id: string, data: UpdateBlogDto, token: string) =>
     apiFetch<Blog>(`/blogs/${id}`, {
       method: "PATCH",
       token,

@@ -7,6 +7,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import slugify from 'slugify';
 
 import { BlogPublishService } from 'src/queue/blog-publish.service';
+import { BlogPublishGateway } from 'src/queue/blog-publish.gateway';
 
 @Injectable()
 export class BlogsService {
@@ -15,6 +16,8 @@ export class BlogsService {
     private readonly blogModel: Model<Blog>,
 
     private readonly blogPublishService: BlogPublishService,
+
+    private readonly blogPublishGateway: BlogPublishGateway,
   ) {}
 
   async create(userId: string, dto: CreateBlogDto) {
@@ -48,6 +51,10 @@ export class BlogsService {
       );
     }
 
+    this.blogPublishGateway.emitBlogUpdated(
+      blog.toObject ? blog.toObject() : blog,
+    );
+
     return blog;
   }
 
@@ -64,12 +71,18 @@ export class BlogsService {
 
   async update(id: string, userId: string, dto: UpdateBlogDto) {
     const updateData: UpdateQuery<Blog> = { ...dto };
+
     if (dto.content) {
       updateData.readingTime = Math.ceil(
         dto.content.trim().split(/\s+/).length / 200,
       );
     }
-    return this.blogModel.findOneAndUpdate(
+
+    if (dto.scheduledAt) {
+      updateData.status = 'scheduled';
+    }
+
+    const blog = await this.blogModel.findOneAndUpdate(
       {
         _id: id,
         userId,
@@ -79,7 +92,25 @@ export class BlogsService {
         new: true,
       },
     );
+
+    if (!blog) {
+      return null;
+    }
+
+    if (dto.scheduledAt) {
+      await this.blogPublishService.schedulePost(
+        String(blog._id),
+        dto.scheduledAt,
+      );
+    }
+
+    this.blogPublishGateway.emitBlogUpdated(
+      blog.toObject ? blog.toObject() : blog,
+    );
+
+    return blog;
   }
+
   async remove(id: string, userId: string) {
     return this.blogModel.findOneAndDelete({
       _id: id,

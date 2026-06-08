@@ -2,6 +2,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { BlogPublishGateway } from './blog-publish.gateway';
 import { BlogPublishService } from './blog-publish.service';
 import { BlogPublishProcessor } from './blog-publish.processor';
 
@@ -20,7 +21,7 @@ import { Blog, BlogSchema } from 'src/blogs/schema/blogs.schema';
       },
     ]),
   ],
-  providers: [BlogPublishService, BlogPublishProcessor],
-  exports: [BlogPublishService],
+  providers: [BlogPublishService, BlogPublishProcessor, BlogPublishGateway],
+  exports: [BlogPublishService, BlogPublishGateway],
 })
 export class QueueModule {}
