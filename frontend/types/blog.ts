@@ -32,7 +32,7 @@ export interface CreateBlogDto {
 
   summary?: string;
 
-  keyword?: string[];
+  keywords?: string[];
 
   scheduledAt?: string;
 }
@@ -42,7 +42,7 @@ export interface UpdateBlogDto {
 
   summary?: string;
 
-  keyword?: string[];
+  keywords?: string[];
 
   scheduledAt?: string;
 }
