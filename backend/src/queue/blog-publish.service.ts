@@ -9,8 +9,10 @@ export class BlogPublishService {
     private readonly publishQueue: Queue,
   ) {}
 
-  async schedulePost(blogId: string, scheduleAt: Date) {
-    const delay = new Date(scheduleAt).getTime() - Date.now();
+  async schedulePost(blogId: string, scheduleAt: Date | string) {
+    const publishAt =
+      typeof scheduleAt === 'string' ? new Date(scheduleAt) : scheduleAt;
+    const delay = Math.max(0, publishAt.getTime() - Date.now());
 
     return this.publishQueue.add('publish-blog', { blogId }, { delay });
   }

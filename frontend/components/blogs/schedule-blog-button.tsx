@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuthAction } from "@/hooks/use-auth-action";
 import { Button } from "../ui/button";
 import { CalendarDays } from "lucide-react";

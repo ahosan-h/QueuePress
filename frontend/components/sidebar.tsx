@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 import {
   LayoutDashboard,
@@ -12,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import {
   Sheet,
@@ -48,14 +50,15 @@ const navItems = [
 
 function SidebarContent() {
   const pathname = usePathname();
+  const { isSignedIn } = useUser();
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <div className="flex h-16 items-center border-b px-6">
         <Image src="/logo-app.png" alt="QueuePress" width={140} height={32} />
       </div>
 
-      <nav className="space-y-2 p-4">
+      <nav className="flex-1 space-y-2 p-4 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
 
@@ -76,7 +79,27 @@ function SidebarContent() {
           );
         })}
       </nav>
-    </>
+
+      <div className="border-t space-y-3 p-4 lg:hidden">
+        <Separator />
+        {isSignedIn ? (
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">Account</span>
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "h-8 w-8 border border-border",
+                },
+              }}
+            />
+          </div>
+        ) : (
+          <SignInButton mode="modal">
+            <Button className="w-full">Login</Button>
+          </SignInButton>
+        )}
+      </div>
+    </div>
   );
 }
 

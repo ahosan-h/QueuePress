@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuthAction } from "@/hooks/use-auth-action";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
