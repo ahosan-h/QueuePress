@@ -19,6 +19,7 @@ import {
 import { BlogStatusBadge } from "./blog-status-badge";
 import { EditBlogButton } from "./edit-blog-button";
 import { DeleteBlogButton } from "./delete-blog-button";
+import { CalendarDays, Clock } from "lucide-react";
 
 interface BlogsTableProps {
   blogs?: Blog[];
@@ -82,43 +83,68 @@ export function BlogsTable({ blogs }: BlogsTableProps) {
         {blogsToRender.map((blog) => (
           <div
             key={blog._id}
-            className="rounded-3xl border border-border bg-card p-4 shadow-sm"
+            className="flex flex-col overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md"
           >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-base font-semibold text-foreground line-clamp-2">
-                  {blog.title}
-                </p>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                  {blog.summary || blog.content.slice(0, 120)}
-                </p>
+            {/* --- Card Body --- */}
+            <div className="p-5">
+              {/* Header: Title & Status */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1 space-y-1">
+                  <h3 className="text-base font-semibold leading-snug tracking-tight text-foreground line-clamp-2">
+                    {blog.title}
+                  </h3>
+                </div>
+                <div className="shrink-0 mt-0.5">
+                  <BlogStatusBadge status={blog.status} />
+                </div>
               </div>
-              <BlogStatusBadge status={blog.status} />
-            </div>
 
-            <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <span className="rounded-full bg-muted/80 px-3 py-1">
-                {blog.readingTime ?? 0} min
-              </span>
-              <span className="rounded-full bg-muted/80 px-3 py-1">
-                {new Date(blog.createdAt).toLocaleDateString()}
-              </span>
-            </div>
+              {/* Summary */}
+              <p className="mt-2.5 text-sm text-muted-foreground line-clamp-2">
+                {blog.summary || blog.content.slice(0, 120)}
+              </p>
 
-            {blog.keywords?.length ? (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {blog.keywords.slice(0, 3).map((keyword) => (
-                  <span
-                    key={keyword}
-                    className="rounded-full border px-2 py-1 text-[11px] font-medium text-muted-foreground"
-                  >
-                    {keyword}
+              {/* Metadata (Reading Time & Date) */}
+              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5" />
+                  <span>{blog.readingTime ?? 0} min read</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  <span>
+                    {new Date(blog.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                   </span>
-                ))}
+                </div>
               </div>
-            ) : null}
 
-            <div className="mt-4 flex flex-wrap gap-2">
+              {/* Keywords */}
+              {blog.keywords?.length ? (
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {blog.keywords.slice(0, 3).map((keyword) => (
+                    <span
+                      key={keyword}
+                      className="inline-flex items-center rounded-md bg-secondary/60 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                  {/* Show remaining count if more than 3 keywords */}
+                  {blog.keywords.length > 3 && (
+                    <span className="inline-flex items-center rounded-md bg-secondary/30 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      +{blog.keywords.length - 3}
+                    </span>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            {/* --- Card Footer Actions --- */}
+            <div className="flex items-center justify-end gap-3 border-t bg-muted/20 px-5 py-3">
               <EditBlogButton blogId={blog._id} />
               <DeleteBlogButton onDelete={() => handleDelete(blog._id)} />
             </div>
