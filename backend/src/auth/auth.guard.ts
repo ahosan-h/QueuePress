@@ -4,11 +4,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-
+import { ConfigService } from '@nestjs/config';
 import { verifyToken } from '@clerk/backend';
 
 @Injectable()
 export class ClerkAuthGuard implements CanActivate {
+  constructor(private readonly configService: ConfigService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
       const request = context.switchToHttp().getRequest();
@@ -30,18 +32,18 @@ export class ClerkAuthGuard implements CanActivate {
       }
 
       const sessionClaim = await verifyToken(token, {
-        secretKey: process.env.CLERK_SECRET_KEY!,
+        secretKey: this.configService.getOrThrow<string>('CLERK_SECRET_KEY'),
+        clockSkewInMs: 40000, // 40-second tolerance
       });
 
       request.user = {
         clerkId: sessionClaim.sub,
-
         email: typeof sessionClaim.email === 'string' ? sessionClaim.email : '',
       };
 
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       throw new UnauthorizedException('Invalid token');
     }
