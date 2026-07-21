@@ -2,7 +2,7 @@
 
 ## 🌐 Live Demo
 
-comming soon
+- 🖥️ [Frontend](https://queue-press.vercel.app)
 
 **A modern blog publishing platform with smart queue management, real-time updates, and secure authentication.**
 
